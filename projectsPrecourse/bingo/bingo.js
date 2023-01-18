@@ -6,7 +6,9 @@ const promptUserName = () => {
   if (userName === "" || userName === " ") {
     console.log("Introduce un nombre de usuario válido.");
     return promptUserName();
-  } else return player;
+  }
+
+  return player;
 };
 
 const promptGameMode = (userName) => {
@@ -18,9 +20,13 @@ const promptGameMode = (userName) => {
   );
   if (gameMode === null) {
     return null;
-  } else if (gameMode !== "1" && gameMode !== "2") {
+  }
+
+  if (gameMode !== "1" && gameMode !== "2") {
     return promptGameMode(userName);
-  } else return gameMode;
+  }
+
+  return gameMode;
 };
 
 const confirmCard = () => {
@@ -31,18 +37,19 @@ const confirmCard = () => {
     showCard(bingoCard);
     confirmCard = confirm("Quieres jugar con estos números?");
   }
+
   return bingoCard;
 };
 
-const promptNewTurn = () => {
-  return confirm("Quieres sacar otro número?");
-};
+const promptNewTurn = () => confirm("Quieres sacar otro número?");
 
 const promptNewGame = (userName) => {
   const newGame = confirm("Quieres jugar otra vez?");
   if (!newGame) {
     console.log(`Gracias por jugar, ${userName}. Hasta la próxima!`);
-  } else main();
+  }
+
+  main();
 };
 
 const generateCard = () => {
@@ -53,6 +60,7 @@ const generateCard = () => {
       bingoCard.push(num);
     }
   }
+
   bingoCard.sort((a, b) => a - b);
   return bingoCard;
 };
@@ -70,6 +78,7 @@ const formatSingleDigits = (rows) => {
       rows[i][j] = String(rows[i][j]).padStart(2, " ");
     }
   }
+
   return rows;
 };
 
@@ -97,6 +106,7 @@ const getNewNum = (usedNums) => {
     randomNum = Math.floor(Math.random() * 90 + 1);
     unique = !usedNums.includes(randomNum);
   }
+
   return randomNum;
 };
 
@@ -111,6 +121,7 @@ const checkNum = (bingoCard, randomNum, player) => {
       );
     }
   }
+
   if (!found) {
     console.log(
       `Has sacado ${randomNum}. Desafortunadamente, no está en tu cartón.\nTienes ${player.score} puntos.`
@@ -118,13 +129,13 @@ const checkNum = (bingoCard, randomNum, player) => {
   }
 };
 
-const checkWin = (arrBingoNums) => {
-  return arrBingoNums.every((num) => num === "X");
-};
+const checkWin = (arrBingoNums) => arrBingoNums.every((num) => num === "X");
 
 const sortPlayers = (players) => players.sort((a, b) => b.score - a.score);
 
 const rankingPositionComment = (userName, players, player) => {
+  let rankingComment;
+
   switch (players.indexOf(player)) {
     case 0:
       rankingComment = "Felicidades, campeón!";
@@ -138,10 +149,11 @@ const rankingPositionComment = (userName, players, player) => {
     case 3:
       rankingComment = "Bueno, al menos no has perdido...";
       break;
-    case 4:
+    default:
       rankingComment = `No te desanimes, ${userName}! Siempre puedes volver a probar tu suerte echando otra partida... :)`;
       break;
   }
+
   return rankingComment;
 };
 
@@ -154,12 +166,12 @@ const showGameState = (
   player,
   players
 ) => {
-  let ranking = sortPlayers(players);
-  let rankingComment = rankingPositionComment(userName, players, player);
+  const ranking = sortPlayers(players);
+  const rankingComment = rankingPositionComment(userName, players, player);
   const [firstRow, secondRow, thirdRow] = getRows(bingoCard);
 
   if (gameMode === "1") {
-    player.score = player.score - 5;
+    player.score -= 5;
     const isLine =
       checkWin(firstRow) || checkWin(secondRow) || checkWin(thirdRow);
     if (isLine && !gameState.isLine) {
@@ -180,7 +192,7 @@ const showGameState = (
   }
 
   if (gameMode === "2") {
-    player.score = player.score - 10;
+    player.score -= 10;
     const isBingo = checkWin(bingoCard);
     const isOneLine =
       checkWin(firstRow) || checkWin(secondRow) || checkWin(thirdRow);
@@ -215,6 +227,7 @@ const showGameState = (
       gameState.isOneLine = true;
     }
   }
+
   return gameState;
 };
 
@@ -261,7 +274,7 @@ const gameModeClassic = (userName, gameMode, player) => {
   console.log(`Sabia elección, ${userName}! Empezamos!`);
 
   const usedNums = [];
-  let gameState = { isLine: false, finish: false };
+  const gameState = { isLine: false, finish: false };
   while (!gameState.finish && !gameState.isLine) {
     newTurn(
       userName,
@@ -276,6 +289,7 @@ const gameModeClassic = (userName, gameMode, player) => {
       gameState.finish = !promptNewTurn(userName);
     }
   }
+
   return players;
 };
 
@@ -296,7 +310,7 @@ const gameModePro = (userName, gameMode, player) => {
   console.log(`Sabia elección, ${userName}! Empezamos!`);
 
   const usedNums = [];
-  let gameState = {
+  const gameState = {
     isOneLine: false,
     isTwoLines: false,
     isBingo: false,
@@ -316,6 +330,7 @@ const gameModePro = (userName, gameMode, player) => {
       gameState.finish = !promptNewTurn(userName);
     }
   }
+
   return players;
 };
 
@@ -330,9 +345,11 @@ const main = () => {
   if (gameMode === null) {
     return;
   }
+
   if (gameMode === "1") {
     gameModeClassic(userName, gameMode, player);
   }
+
   if (gameMode === "2") {
     gameModePro(userName, gameMode, player);
   }

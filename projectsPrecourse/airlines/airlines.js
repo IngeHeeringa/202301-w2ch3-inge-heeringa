@@ -1,16 +1,16 @@
 const prompt = require("prompt-sync")();
 
 const flights = [
-  { id: 00, to: "New York", from: "Barcelona", cost: 700, scale: false },
-  { id: 01, to: "Los Angeles", from: "Madrid", cost: 1100, scale: true },
-  { id: 02, to: "Paris", from: "Barcelona", cost: 210, scale: false },
-  { id: 03, to: "Roma", from: "Barcelona", cost: 150, scale: false },
-  { id: 04, to: "London", from: "Madrid", cost: 200, scale: false },
-  { id: 05, to: "Madrid", from: "Barcelona", cost: 90, scale: false },
-  { id: 06, to: "Tokyo", from: "Madrid", cost: 1500, scale: true },
-  { id: 07, to: "Shangai", from: "Barcelona", cost: 800, scale: true },
-  { id: 08, to: "Sydney", from: "Barcelona", cost: 150, scale: true },
-  { id: 09, to: "Tel-Aviv", from: "Madrid", cost: 150, scale: false },
+  { id: 0, to: "New York", from: "Barcelona", cost: 700, scale: false },
+  { id: 1, to: "Los Angeles", from: "Madrid", cost: 1100, scale: true },
+  { id: 2, to: "Paris", from: "Barcelona", cost: 210, scale: false },
+  { id: 3, to: "Roma", from: "Barcelona", cost: 150, scale: false },
+  { id: 4, to: "London", from: "Madrid", cost: 200, scale: false },
+  { id: 5, to: "Madrid", from: "Barcelona", cost: 90, scale: false },
+  { id: 6, to: "Tokyo", from: "Madrid", cost: 1500, scale: true },
+  { id: 7, to: "Shangai", from: "Barcelona", cost: 800, scale: true },
+  { id: 8, to: "Sydney", from: "Barcelona", cost: 150, scale: true },
+  { id: 9, to: "Tel-Aviv", from: "Madrid", cost: 150, scale: false },
 ];
 
 const promptUsername = () => {

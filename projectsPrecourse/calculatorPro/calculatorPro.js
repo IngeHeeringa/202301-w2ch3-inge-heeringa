@@ -1,10 +1,9 @@
 const prompt = require("prompt-sync")();
 
-const squareRoot = (num) => {
-  return Number.isInteger(Math.sqrt(num))
+const squareRoot = (num) =>
+  Number.isInteger(Math.sqrt(num))
     ? Math.sqrt(num)
     : parseFloat(Math.sqrt(num).toFixed(3));
-};
 
 const promptNums = () => {
   const num = prompt(
@@ -12,12 +11,15 @@ const promptNums = () => {
   );
   if (num === "=") {
     return null;
-  } else if (isNaN(num) || num === "" || num === " ") {
+  }
+
+  if (isNaN(num) || num === "" || num === " ") {
     console.log(
       `${num} no es un número. Vuelve a intentarlo introduciendo al menos 1 número.`
     );
     return promptNums();
   }
+
   return num;
 };
 
@@ -31,6 +33,7 @@ const pushNums = () => {
       finish = true;
     } else arrNums.push(nums);
   }
+
   return arrNums;
 };
 
@@ -51,9 +54,9 @@ const calculator = (arrNums) => {
 
   operations.push(add, subtract, multiply, divide);
   operations.forEach((operation) => {
-    Number.isInteger(operation)
-      ? result.push(operation)
-      : result.push(parseFloat(operation).toFixed(3));
+    if (Number.isInteger(operation)) {
+      result.push(operation);
+    } else result.push(parseFloat(operation).toFixed(3));
   });
 
   const nums = arrNums.toString();
@@ -73,6 +76,7 @@ const newOperation = () => {
   if (promptNew === "y") {
     return main();
   }
+
   console.log("Gracias por usar la calculadora. Hasta pronto!");
 };
 
