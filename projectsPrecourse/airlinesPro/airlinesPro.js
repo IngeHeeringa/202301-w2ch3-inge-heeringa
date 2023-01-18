@@ -1,16 +1,14 @@
-const prompt = require("prompt-sync")();
-
 const flights = [
-  { id: 00, to: "New York", from: "Barcelona", cost: 700, scale: false },
-  { id: 01, to: "Los Angeles", from: "Madrid", cost: 1100, scale: true },
-  { id: 02, to: "Paris", from: "Barcelona", cost: 210, scale: false },
-  { id: 03, to: "Roma", from: "Barcelona", cost: 150, scale: false },
-  { id: 04, to: "London", from: "Madrid", cost: 200, scale: false },
-  { id: 05, to: "Madrid", from: "Barcelona", cost: 90, scale: false },
-  { id: 06, to: "Tokyo", from: "Madrid", cost: 1500, scale: true },
-  { id: 07, to: "Shangai", from: "Barcelona", cost: 800, scale: true },
-  { id: 08, to: "Sydney", from: "Barcelona", cost: 150, scale: true },
-  { id: 09, to: "Tel-Aviv", from: "Madrid", cost: 150, scale: false },
+  { id: 0, to: "New York", from: "Barcelona", cost: 700, scale: false },
+  { id: 1, to: "Los Angeles", from: "Madrid", cost: 1100, scale: true },
+  { id: 2, to: "Paris", from: "Barcelona", cost: 210, scale: false },
+  { id: 3, to: "Roma", from: "Barcelona", cost: 150, scale: false },
+  { id: 4, to: "London", from: "Madrid", cost: 200, scale: false },
+  { id: 5, to: "Madrid", from: "Barcelona", cost: 90, scale: false },
+  { id: 6, to: "Tokyo", from: "Madrid", cost: 1500, scale: true },
+  { id: 7, to: "Shangai", from: "Barcelona", cost: 800, scale: true },
+  { id: 8, to: "Sydney", from: "Barcelona", cost: 150, scale: true },
+  { id: 9, to: "Tel-Aviv", from: "Madrid", cost: 150, scale: false },
 ];
 
 const goodbyeMessage = () => {
@@ -24,12 +22,15 @@ const promptUsername = () => {
   if (userName === "" || userName === " ") {
     console.log("Introduce un nombre de usuario válido.");
     return promptUsername();
-  } else if (userName === null) {
+  }
+
+  if (userName === null) {
     return null;
-  } else
-    console.log(
-      `Bienvenid@ a ISDI Airlines, ${userName}. Aquí encuentras la última información sobre nuestros vuelos.`
-    );
+  }
+
+  console.log(
+    `Bienvenid@ a ISDI Airlines, ${userName}. Aquí encuentras la última información sobre nuestros vuelos.`
+  );
 };
 
 const flightInfo = () => {
@@ -62,7 +63,7 @@ const lastFlights = () => {
 };
 
 const createFlights = () => {
-  while (flights.length < 15) {
+  if (flights.length < 15) {
     const newFlight = {
       id: flights.length,
       to: "",
@@ -74,6 +75,7 @@ const createFlights = () => {
     while (!newFlight.to || newFlight.to === " " || !isNaN(newFlight.to)) {
       newFlight.to = prompt("Destino: ");
     }
+
     while (
       !newFlight.from ||
       newFlight.from === " " ||
@@ -81,6 +83,7 @@ const createFlights = () => {
     ) {
       newFlight.from = prompt("Origen: ");
     }
+
     while (!newFlight.cost || Number.isNaN(newFlight.cost)) {
       newFlight.cost = Number(prompt("Coste: €"));
     }
@@ -98,8 +101,11 @@ const createFlights = () => {
     );
     if (promptCreate) {
       return createFlights();
-    } else return runAdminRole();
+    }
+
+    return runAdminRole();
   }
+
   console.log(
     "El límite de vuelos es 15. Elimina un vuelo antes de crear uno nuevo."
   );
@@ -129,19 +135,21 @@ const deleteFlights = () => {
     console.log(
       `El vuelo ${promptFlightId} no existe en la base de datos. Introduce un número de vuelo válido.`
     );
-  } else {
-    console.log(
-      `El vuelo ${promptFlightId} ha sido eliminado. La nueva lista de vuelos es:`
-    );
-    console.log(flights);
   }
+
+  console.log(
+    `El vuelo ${promptFlightId} ha sido eliminado. La nueva lista de vuelos es:`
+  );
+  console.log(flights);
 
   const promptDelete = Boolean(
     prompt(`Quieres eliminar otro vuelo? (Y = sí, cancelar = no) `)
   );
   if (promptDelete) {
     return deleteFlights();
-  } else return runAdminRole();
+  }
+
+  return runAdminRole();
 };
 
 const runAdminRole = () => {
@@ -177,6 +185,7 @@ const runUserRole = () => {
       prompt("Indica tu precio y te buscamos los vuelos correspondientes: €")
     );
   }
+
   const myRange = flights.filter((flight) => flight.cost <= searchPrice);
 
   if (myRange.length === 0) {
@@ -200,9 +209,9 @@ const runUserRole = () => {
   );
   if (promptSearch) {
     return runUserRole();
-  } else {
-    return goodbyeMessage();
   }
+
+  return goodbyeMessage();
 };
 
 const profile = () => {
@@ -233,6 +242,7 @@ const main = () => {
   if (userName === null) {
     return goodbyeMessage();
   }
+
   flightInfo();
   averageCost();
   scaleInfo();
