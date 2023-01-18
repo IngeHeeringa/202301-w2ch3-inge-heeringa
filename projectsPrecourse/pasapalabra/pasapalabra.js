@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const promptUserName = () => {
   let userName = window.prompt("Welcome to Pasapalabra! What is your name?");
   if (userName === "" || userName === " ") {
@@ -18,13 +19,17 @@ const promptGameMode = (userName) => {
 
   if (gameMode === null) {
     return null;
-  } else if (gameMode !== "1" && gameMode !== "2" && gameMode !== "3") {
+  }
+
+  if (gameMode !== "1" && gameMode !== "2" && gameMode !== "3") {
     return promptGameMode(userName);
-  } else return gameMode;
+  }
+
+  return gameMode;
 };
 
 const confirmStart = () => {
-  let startGame = confirm(`Ready? Let's play!`);
+  const startGame = confirm(`Ready? Let's play!`);
   if (!startGame) {
     return null;
   }
@@ -42,9 +47,8 @@ const promptQuestion = (letters, gameMode) => {
     case "2":
       currentQuestion = questionsMedium;
       break;
-    case "3":
+    default:
       currentQuestion = questionsHard;
-      break;
   }
 
   const currentLetter = letters[letter].letter.toUpperCase();
@@ -53,26 +57,31 @@ const promptQuestion = (letters, gameMode) => {
   );
   if (userAnswer === null) {
     return [currentQuestion, null];
-  } else if (userAnswer === "" || userAnswer === " ") {
+  }
+
+  if (userAnswer === "" || userAnswer === " ") {
     alert(`Please enter a word starting with ${currentLetter}`);
     return promptQuestion(letters, gameMode);
-  } else return [currentQuestion, userAnswer];
+  }
+
+  return [currentQuestion, userAnswer];
 };
 
 const promptNewGame = (userName) => {
   const newGame = confirm("Would you like to play again?");
   if (!newGame) {
     console.log(`Thanks for playing, ${userName}. See you soon!`);
-  } else main();
+  }
+
+  main();
 };
 
 const setTimer = (gameState) => {
   gameState.startTime = Date.now();
 };
 
-const formatNumOfWords = (gameState) => {
-  return gameState.rightAnswers === 1 ? "word" : "words";
-};
+const formatNumOfWords = (gameState) =>
+  gameState.rightAnswers === 1 ? "word" : "words";
 
 const showGameState = (gameState) => {
   console.log(
@@ -83,6 +92,8 @@ const showGameState = (gameState) => {
 const sortPlayers = (players) => players.sort((a, b) => b.score - a.score);
 
 const formatRankingPosition = (players, player) => {
+  let ending;
+
   switch (players.indexOf(player) + 1) {
     case 1:
       ending = "st";
@@ -97,6 +108,7 @@ const formatRankingPosition = (players, player) => {
       ending = "th";
       break;
   }
+
   return ending;
 };
 
@@ -109,7 +121,7 @@ const showRanking = (player, gameState) => {
   ];
   players.push(player);
   player.score = gameState.rightAnswers;
-  let word_s = formatNumOfWords(gameState);
+  const wordsPlural = formatNumOfWords(gameState);
   const ranking = sortPlayers(players);
   const rankingPositionFormat = formatRankingPosition(players, player);
   const timeInSeconds = (Date.now() - gameState.startTime) / 1000;
@@ -123,7 +135,7 @@ const showRanking = (player, gameState) => {
   }
 
   console.log(
-    `You got ${player.score} ${word_s} right, which puts you in the ${
+    `You got ${player.score} ${wordsPlural} right, which puts you in the ${
       ranking.indexOf(player) + 1
     }${rankingPositionFormat} position.\nFinal ranking:`
   );
@@ -135,18 +147,20 @@ const showRanking = (player, gameState) => {
 
 const checkAnswer = (letters, player, gameMode, gameState) => {
   let [currentQuestion, userAnswer] = promptQuestion(letters, gameMode);
-  let word_s = formatNumOfWords(gameState);
+  const wordsPlural = formatNumOfWords(gameState);
 
   if (userAnswer === null) {
     gameState.finish = true;
-    console.log(`You got ${gameState.rightAnswers} ${word_s} right.`);
+    console.log(`You got ${gameState.rightAnswers} ${wordsPlural} right.`);
     return;
-  } else userAnswer = userAnswer.toLowerCase();
+  }
+
+  userAnswer = userAnswer.toLowerCase();
 
   switch (userAnswer) {
     case "end":
       gameState.finish = true;
-      console.log(`You got ${gameState.rightAnswers} ${word_s} right.`);
+      console.log(`You got ${gameState.rightAnswers} ${wordsPlural} right.`);
       break;
     case currentQuestion.answer:
       letters[letter].state.gotRight = true;
@@ -170,12 +184,12 @@ const checkAnswer = (letters, player, gameMode, gameState) => {
 };
 
 const newTurn = (letters, player, gameMode, gameState) => {
-  let word_s = formatNumOfWords(gameState);
+  const wordsPlural = formatNumOfWords(gameState);
   for (letter in letters) {
     if (Date.now() - gameState.startTime >= gameState.maxTime) {
       alert("TIME'S UP! GAME OVER.");
       console.log(
-        `You've run out of time! You got ${gameState.rightAnswers} ${word_s} right.`
+        `You've run out of time! You got ${gameState.rightAnswers} ${wordsPlural} right.`
       );
       gameState.finish = true;
       break;
@@ -190,11 +204,12 @@ const newTurn = (letters, player, gameMode, gameState) => {
       showGameState(gameState);
     }
   }
+
   return gameState;
 };
 
 const gameFlow = (letters, player, gameMode) => {
-  let gameState = {
+  const gameState = {
     rightAnswers: 0,
     wrongAnswers: 0,
     passedWords: 0,
@@ -216,28 +231,31 @@ const gameFlow = (letters, player, gameMode) => {
 
 const gameModeEasy = (letters, player, userName, gameMode) => {
   alert(`Playing it safe or just warming up, ${userName}?`);
-  let startGame = confirmStart();
+  const startGame = confirmStart();
   if (startGame === null) {
     return;
   }
+
   gameFlow(letters, player, gameMode);
 };
 
 const gameModeMedium = (letters, player, userName, gameMode) => {
   alert(`The golden mean between two extremes. Great choice, ${userName}!`);
-  let startGame = confirmStart();
+  const startGame = confirmStart();
   if (startGame === null) {
     return;
   }
+
   gameFlow(letters, player, gameMode);
 };
 
 const gameModeHard = (letters, player, userName, gameMode) => {
   alert(`You like a challenge, don't you, ${userName}?`);
-  let startGame = confirmStart();
+  const startGame = confirmStart();
   if (startGame === null) {
     return;
   }
+
   gameFlow(letters, player, gameMode);
 };
 
@@ -660,7 +678,7 @@ const main = () => {
     return;
   }
 
-  let gameMode = promptGameMode(userName);
+  const gameMode = promptGameMode(userName);
   switch (gameMode) {
     case "1":
       gameModeEasy(letters, player, userName, gameMode);
@@ -671,7 +689,7 @@ const main = () => {
     case "3":
       gameModeHard(letters, player, userName, gameMode);
       break;
-    case null:
+    default:
       return;
   }
 
